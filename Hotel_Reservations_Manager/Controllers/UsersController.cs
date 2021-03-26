@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelData;
 using HotelData.Entity;
+using Hotel_Reservations_Manager.Services;
 
 namespace Hotel_Reservations_Manager.Controllers
 {
@@ -58,8 +59,26 @@ namespace Hotel_Reservations_Manager.Controllers
         {
             if (ModelState.IsValid)
             {
+               
                 user.IsActive = true;
                 user.HireDate = DateTime.Now;
+                try
+                {
+                    SecurityChecker.CheckUser(user);
+                }
+                catch (Exception)
+                {
+                    return View(user);
+                }
+               /* try
+                {
+                  AvailabilityChecker.CheckUserAvailabikity(user);
+                }
+                catch (Exception)
+                {
+                   return View(user);
+                }*/
+                user.Password = Hasher.GetHash(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

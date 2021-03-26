@@ -17,7 +17,7 @@ namespace Hotel_Reservations_Manager.Services
             return rgPass.IsMatch(pass);
         }
         private static string phoneattern = @"^((\+359)|0)(8)([789][0-9]{3})([0-9]{4})$";
-        private static Regex rgPhone = new Regex(passPattern);
+        private static Regex rgPhone = new Regex(phoneattern);
         private static bool CheckPhone(string phone)
         {
             return rgPhone.IsMatch(phone);
@@ -41,10 +41,10 @@ namespace Hotel_Reservations_Manager.Services
         public static void CheckUser(User usr)
         {
             if (CheckIfNull(usr.Egn) || CheckIfNull(usr.Email) || CheckIfNull(usr.FirstName) ||
-            CheckIfNull(usr.HireDate) || CheckIfNull(usr.LastName) || CheckIfNull(usr.Password) ||
-            CheckIfNull(usr.PhoneNumber) || CheckIfNull(usr.SecondName) || CheckIfNull(usr.Username))
+           CheckIfNull(usr.HireDate) || CheckIfNull(usr.LastName) || CheckIfNull(usr.Password) ||
+           CheckIfNull(usr.PhoneNumber) || CheckIfNull(usr.SecondName) || CheckIfNull(usr.Username))
             {
-                throw new ArgumentNullException();
+               throw new ArgumentNullException();
             }
             if (!CheckEmail(usr.Email))
             {

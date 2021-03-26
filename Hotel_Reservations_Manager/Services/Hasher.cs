@@ -40,22 +40,6 @@ namespace Hotel_Reservations_Manager.Services
             }
         }
         /// <summary>
-        /// well its actaully kinda pointless dont know why its here but im scared to get rid of it
-        /// </summary>
-
-        public static string GetHash(string password, byte[] salt)
-        {
-            using (var hasher = new Rfc2898DeriveBytes(password, salt, 1000))
-            {
-                byte[] hashedPass = hasher.GetBytes(20);
-                byte[] saltyHashedPassword = new byte[36];
-                Array.Copy(hashedPass, 0, saltyHashedPassword, 0, 20);
-                Array.Copy(salt, 0, saltyHashedPassword, 20, 16);
-                string base64Password = Convert.ToBase64String(saltyHashedPassword);
-                return base64Password;
-            }
-        }
-        /// <summary>
         /// compares a password to the hash saved into the database
         /// </summary>
         public static void CheckPass(User usr, string imputPass)
