@@ -166,9 +166,40 @@ namespace Hotel_Reservations_Manager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+        // GET: Users/Login
+        public IActionResult LogIn()
+        {
+            return View();
+        }
+
+        // POST: Users/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogIn([Bind("Id,Username,Password,FirstName,SecondName,LastName,Egn,PhoneNumber,Email,IsActive,HireDate,LeaveDate")] User user)
+        {
+            var users = (from u in _context.Users where u.Username == user.Username select u).ToList();
+            if (users.Count == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            try
+                {
+                    Hasher.CheckPass(users[0], user.Password);
+                }
+                catch (Exeptions.IncorrectPassExeption)
+                {
+                    user.Password = null;
+                    return View(user);
+                }
+                int i = 6;
+            return RedirectToAction(nameof(Index));
         }
     }
 }
