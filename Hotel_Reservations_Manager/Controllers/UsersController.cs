@@ -70,14 +70,14 @@ namespace Hotel_Reservations_Manager.Controllers
                 {
                     return View(user);
                 }
-               /* try
+                try
                 {
-                  AvailabilityChecker.CheckUserAvailabikity(user);
+                  AvailabilityChecker.CheckUserAvailabikity(user,_context);
                 }
                 catch (Exception)
                 {
                    return View(user);
-                }*/
+                }
                 user.Password = Hasher.GetHash(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
