@@ -14,7 +14,7 @@ namespace Hotel_Reservations_Manager.Controllers
     public class UsersController : Controller
     {
         private readonly HotelContext _context;
-
+        
         public UsersController(HotelContext context)
         {
             _context = context;
@@ -184,6 +184,10 @@ namespace Hotel_Reservations_Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn([Bind("Id,Username,Password,FirstName,SecondName,LastName,Egn,PhoneNumber,Email,IsActive,HireDate,LeaveDate")] User user)
         {
+            if (CurrentUser.IsLogged == true)
+            {
+                return View(user);
+            }
             var users = (from u in _context.Users where u.Username == user.Username select u).ToList();
             if (users.Count == 0)
             {
@@ -198,7 +202,8 @@ namespace Hotel_Reservations_Manager.Controllers
                     user.Password = null;
                     return View(user);
                 }
-                int i = 6;
+            CurrentUser.SetCurrentUser(users[0].Id,users[0].Username);
+            string username = CurrentUser.UserName;
             return RedirectToAction(nameof(Index));
         }
     }
