@@ -188,7 +188,7 @@ namespace Hotel_Reservations_Manager.Controllers
             {
                 return View(user);
             }
-            var users = (from u in _context.Users where u.Username == user.Username select u).ToList();
+            var users =  (from u in _context.Users where u.Username == user.Username select u).ToList();
             if (users.Count == 0)
             {
                 return RedirectToAction(nameof(Index));

@@ -67,5 +67,50 @@ namespace Hotel_Reservations_Manager.Services
                 throw new EgnAlreadyExistsException();
             }
         }
+        private static bool CheckIfClientEmailAvailable(string email, HotelContext _context)
+        {
+            var emails = (from c in _context.Clients where c.Email == email select c.Email).ToList();
+            if (emails.Count != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        private static bool CheckIfClientPhoneAvailable(string phonenum, HotelContext _context)
+        {
+            var phones = (from c in _context.Clients where c.PhoneNumber == phonenum select c.PhoneNumber).ToList();
+            if (phones.Count != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        public static void CheckClientAvailabikity(Client client, HotelContext context)
+        {
+            if (!CheckIfClientPhoneAvailable(client.PhoneNumber, context))
+            {
+                throw new PhoneAlreadyExistsException();
+            }
+            if (!CheckIfClientEmailAvailable(client.Email, context))
+            {
+                throw new EmailAlreadyExistsException();
+            }
+        }
+        private static bool CheckIfRoomNmAvailable(int roomNum, HotelContext _context)
+        {
+            var rooms = (from r in _context.Rooms where r.roomNumber == roomNum select r.roomNumber).ToList();
+            if (rooms.Count != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        public static void CheckRoomAvailabikity(Room room, HotelContext context)
+        {
+            if (!CheckIfRoomNmAvailable(room.roomNumber, context))
+            {
+                throw new RoomNumberExistsException();
+            }
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace HotelData.Entity
         public int Capacity { get; set; }
         public enum roomType { dualBeds, doubleBed, appartament, pentHouse, mezonet }
         [Required]
+        public string roomTypes { get; set; }
+        [Required]
         public bool IsAvailable { get; set; }
         [Required]
         public decimal PriceAdult { get; set; }

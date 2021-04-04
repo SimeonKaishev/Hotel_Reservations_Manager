@@ -59,6 +59,39 @@ namespace Hotel_Reservations_Manager.Services
                 throw new InvalidPassException();
             }
         }
+        public static void CheckClient(Client cl)
+        {
+            if (CheckIfNull(cl.Email) || CheckIfNull(cl.FirstName) || CheckIfNull(cl.LastName) ||
+               CheckIfNull(cl.PhoneNumber))
+            {
+                throw new ArgumentNullException();
+            }
+            if (!CheckEmail(cl.Email))
+            {
+                throw new InvalidEmailExeption();
+            }
+            if (!CheckPhone(cl.PhoneNumber))
+            {
+                throw new InvalidPhoneException();
+            }
+
+        }
+        public static void CheckRoom(Room room)
+        {
+            if (CheckIfNull(room.roomTypes))
+            {
+                throw new ArgumentNullException();
+            }
+            if (room.PriceAdult == 0 || room.PriceKid == 0)
+            { 
+                throw new InvalidPriceException();
+            }
+            if (room.Capacity == 0)
+            {
+                throw new InvalidCapacityException();
+            }
+
+        }
     }
 }
  
