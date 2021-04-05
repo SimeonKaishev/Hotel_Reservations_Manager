@@ -1,0 +1,64 @@
+﻿@model IEnumerable<HotelData.Entity.Room>
+
+@{
+    ViewData["Title"] = "Choose Room";
+}
+
+<h1>Choose room</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Capacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.roomTypes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceAdult)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceKid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.roomNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.roomTypes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAvailable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceAdult)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceKid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.roomNumber)
+                </td>
+                <td>
+                    <a asp-action="ConfirmRoom" asp-route-id="@item.Id">Choose</a> |
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

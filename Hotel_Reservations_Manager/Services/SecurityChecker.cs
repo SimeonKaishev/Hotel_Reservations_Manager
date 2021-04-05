@@ -92,6 +92,17 @@ namespace Hotel_Reservations_Manager.Services
             }
 
         }
+        public static void CheckDate(DateTime start, DateTime end)
+        {
+            if (start < DateTime.Now)
+            {
+                throw new InvalidStartDateException();
+            }
+            if (end < start)
+            { 
+                throw new InvalidEndDateException();
+            }
+        }
     }
 }
  

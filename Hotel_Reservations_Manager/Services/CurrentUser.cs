@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HotelData;
+using HotelData.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +29,11 @@ namespace Hotel_Reservations_Manager.Services
             UserName = null;
             IsAdmin = false;
             IsLogged = false;
+        }
+        public static User GetCurrent(HotelContext _context)
+        {
+            var users = (from u in _context.Users where u.Username == UserName select u).ToList();
+            return users[0];
         }
     }
 }

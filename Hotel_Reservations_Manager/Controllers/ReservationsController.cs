@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelData;
 using HotelData.Entity;
+using Hotel_Reservations_Manager.Services;
 
 namespace Hotel_Reservations_Manager.Controllers
 {
@@ -56,14 +57,42 @@ namespace Hotel_Reservations_Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,StartDate,EndDate,IsBreakfastIncluded,IsAllInclusive,Price")] Reservation reservation)
         {
-            if (ModelState.IsValid)
+            //reservation.Price = 1;
+           // if (ModelState.IsValid)
+          //  {
+                try
+                {
+                    SecurityChecker.CheckDate(reservation.StartDate, reservation.EndDate);
+                }
+                catch (Exception)
+                {
+                    return View(reservation);
+                }
+                //reservation.Reserver = CurrentUser.GetCurrent(_context);
+                CurrentReservation.SetResFirst(reservation);
+                //_context.Add(reservation);
+               // await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ShowRooms));
+         //   }
+           // return View(reservation);
+        }
+        public async Task<IActionResult> ConfirmRoom(int id)
+        {
+            if (id == 0)
+                return RedirectToAction(nameof(ShowRooms));
+            else
             {
-               
-                _context.Add(reservation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var rooms = (from r in _context.Rooms where r.Id == id select r).ToList();
+                if (rooms.Count > 0)
+                {
+                    CurrentReservation.Room = rooms[0];
+                }
+                return RedirectToAction(nameof(ShowRooms));
             }
-            return View(reservation);
+        }
+        public async Task<IActionResult> ShowRooms()
+        {
+            return View(await _context.Rooms.ToListAsync());
         }
 
         // GET: Reservations/Edit/5

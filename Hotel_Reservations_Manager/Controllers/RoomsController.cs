@@ -132,6 +132,36 @@ namespace Hotel_Reservations_Manager.Controllers
             }
             return View(room);
         }
+        public async Task<IActionResult> ConfirmRoom(int id, [Bind("Id,Capacity,roomTypes,IsAvailable,PriceAdult,PriceKid,roomNumber")] Room room)
+        {
+            if (id != room.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(room);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RoomExists(room.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(room);
+        }
+
 
         // GET: Rooms/Delete/5
         public async Task<IActionResult> Delete(int? id)
