@@ -99,7 +99,25 @@ namespace Hotel_Reservations_Manager.Controllers
         {
             return View(await _context.Clients.ToListAsync());
         }
-
+        public async Task<IActionResult> ConfirmClient(int id)
+        {
+            if (id == 0)
+                return RedirectToAction(nameof(ShowClients));
+            else
+            {
+                if (CurrentReservation.Clients==null|| CurrentReservation.Clients.Count<CurrentReservation.Room.Capacity)
+                {
+                    var clients = (from c in _context.Clients where c.Id == id select c).ToList();
+                    if (clients.Count > 0)
+                    {
+                        CurrentReservation.Clients.Add(clients[0]);
+                        return RedirectToAction(nameof(ShowClients));
+                    }
+                    return RedirectToAction(nameof(ShowClients));
+                }
+                return RedirectToAction(nameof(Index));
+            }
+        }
         // GET: Reservations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
