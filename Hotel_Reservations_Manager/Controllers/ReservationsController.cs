@@ -86,6 +86,7 @@ namespace Hotel_Reservations_Manager.Controllers
                 if (rooms.Count > 0)
                 {
                     CurrentReservation.Room = rooms[0];
+                    return RedirectToAction(nameof(ShowClients));
                 }
                 return RedirectToAction(nameof(ShowRooms));
             }
@@ -93,6 +94,10 @@ namespace Hotel_Reservations_Manager.Controllers
         public async Task<IActionResult> ShowRooms()
         {
             return View(await _context.Rooms.ToListAsync());
+        }
+        public async Task<IActionResult> ShowClients()
+        {
+            return View(await _context.Clients.ToListAsync());
         }
 
         // GET: Reservations/Edit/5
