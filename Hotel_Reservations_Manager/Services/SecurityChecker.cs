@@ -103,6 +103,13 @@ namespace Hotel_Reservations_Manager.Services
                 throw new InvalidEndDateException();
             }
         }
+        public static void CheckReservation(Reservation res)
+        {
+            if (CheckIfNull(res.Clients) || CheckIfNull(res.Room))
+            {
+                throw new ArgumentNullException();
+            }
+        }
     }
 }
  

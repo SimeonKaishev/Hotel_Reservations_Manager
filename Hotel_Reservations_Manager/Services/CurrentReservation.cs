@@ -27,5 +27,32 @@ namespace Hotel_Reservations_Manager.Services
             IsAllInclusive = reservation.IsAllInclusive;
             IsBreakfastIncluded = reservation.IsBreakfastIncluded;
         }
+        public static Reservation GetReservation()
+        {
+            Reservation res = new Reservation();
+            res.Clients = Clients;
+            res.EndDate = EndDate;
+            res.IsAllInclusive = IsAllInclusive;
+            res.IsBreakfastIncluded = IsBreakfastIncluded;
+            CalkPrice();
+            res.Price = Price;
+            res.Reserver = Reserver;
+            res.Room = Room;
+            res.StartDate = StartDate;
+            return res;
+        }
+        private static void CalkPrice()
+        {
+            adults = 0;
+            Price = 0;
+            double days = (EndDate - StartDate).TotalDays;
+            foreach (var item in Clients)
+            {
+                if (item.IsMinor == false)
+                    adults++;
+            }
+            Price += adults * Room.PriceAdult;
+            Price += (Clients.Count - adults) * Room.PriceKid;
+        }
     }
 }

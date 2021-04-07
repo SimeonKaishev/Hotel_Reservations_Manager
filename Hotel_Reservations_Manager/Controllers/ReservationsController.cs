@@ -86,6 +86,7 @@ namespace Hotel_Reservations_Manager.Controllers
                 if (rooms.Count > 0)
                 {
                     CurrentReservation.Room = rooms[0];
+                    CurrentReservation.Clients = new List<Client>();
                     return RedirectToAction(nameof(ShowClients));
                 }
                 return RedirectToAction(nameof(ShowRooms));
@@ -113,8 +114,17 @@ namespace Hotel_Reservations_Manager.Controllers
                         CurrentReservation.Clients.Add(clients[0]);
                         return RedirectToAction(nameof(ShowClients));
                     }
-                    return RedirectToAction(nameof(ShowClients));
+                    
+                    //return RedirectToAction(nameof(ShowClients));
                 }
+                Reservation res = CurrentReservation.GetReservation();
+                try { SecurityChecker.CheckReservation(res); }
+                catch (Exception)
+                {
+                    return RedirectToAction(nameof(Create));
+                }
+                _context.Add(res);
+               // await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
         }
