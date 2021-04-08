@@ -68,8 +68,12 @@ namespace Hotel_Reservations_Manager.Controllers
                 {
                     return View(reservation);
                 }
-                //reservation.Reserver = CurrentUser.GetCurrent(_context);
-                CurrentReservation.SetResFirst(reservation);
+            HttpContext.Items.Add("startdate", reservation.StartDate);
+            //reservation.Reserver = CurrentUser.GetCurrent(_context);
+            HttpContext.Items.Add("enddate", reservation.EndDate);
+            HttpContext.Items.Add("IsAllInclusive", reservation.IsAllInclusive);
+            CurrentReservation.SetResFirst(reservation);
+            HttpContext.Items.Add("breakfast", reservation.IsBreakfastIncluded);
                 //_context.Add(reservation);
                // await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(ShowRooms));
@@ -85,8 +89,11 @@ namespace Hotel_Reservations_Manager.Controllers
                 var rooms = (from r in _context.Rooms where r.Id == id select r).ToList();
                 if (rooms.Count > 0)
                 {
-                    CurrentReservation.Room = rooms[0];
-                    CurrentReservation.Clients = new List<Client>();
+                    HttpContext.Items.Add("roomId", rooms[0].Id);
+                    List<Client> clients = new List<Client>();
+                    HttpContext.Items.Add("clientIds",clients);
+                    CurrentReservation.Room = rooms[0];//
+                    CurrentReservation.Clients = new List<Client>();//
                     return RedirectToAction(nameof(ShowClients));
                 }
                 return RedirectToAction(nameof(ShowRooms));
@@ -111,6 +118,7 @@ namespace Hotel_Reservations_Manager.Controllers
                     var clients = (from c in _context.Clients where c.Id == id select c).ToList();
                     if (clients.Count > 0)
                     {
+                        
                         CurrentReservation.Clients.Add(clients[0]);
                         return RedirectToAction(nameof(ShowClients));
                     }

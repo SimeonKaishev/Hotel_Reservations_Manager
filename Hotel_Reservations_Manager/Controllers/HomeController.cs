@@ -22,6 +22,11 @@ namespace Hotel_Reservations_Manager.Controllers
         {
             return View();
         }
+        public IActionResult IndexA()
+        {
+            return View();
+        }
+
 
         public IActionResult Privacy()
         {

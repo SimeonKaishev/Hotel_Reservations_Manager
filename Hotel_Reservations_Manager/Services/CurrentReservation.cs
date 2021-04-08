@@ -1,4 +1,5 @@
 ﻿using HotelData.Entity;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace Hotel_Reservations_Manager.Services
         public static void SetResFirst(Reservation reservation)
         {
             Reserver = reservation.Reserver;
+            
             StartDate = reservation.StartDate;
             EndDate = reservation.EndDate;
             IsAllInclusive = reservation.IsAllInclusive;

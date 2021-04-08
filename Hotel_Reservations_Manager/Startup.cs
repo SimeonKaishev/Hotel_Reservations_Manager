@@ -25,6 +25,14 @@ namespace Hotel_Reservations_Manager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddControllersWithViews();
             services.AddDbContext<HotelContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("HotelConnection"), b => b.MigrationsAssembly("Hotel_Reservations_Manager")));
@@ -46,7 +54,7 @@ namespace Hotel_Reservations_Manager
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            app.UseRouting();  app.UseSession();
 
             app.UseAuthorization();
 
@@ -54,7 +62,7 @@ namespace Hotel_Reservations_Manager
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Users}/{action=LogIn}/{id?}");
             });
         }
     }
