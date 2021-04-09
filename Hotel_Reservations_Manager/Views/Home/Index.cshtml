@@ -2,7 +2,70 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    body {
+        margin: 25px;
+    }
+
+    div.polaroid {
+        width: 100%;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 25px;
+    }
+
+    div.container {
+        text-align: center;
+        padding: 10px 20px;
+    }
+</style>
+<a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">
+    <div class="polaroid">
+        <img src="https://www.accountingweb.com/sites/default/files/styles/banner/public/happy_clients_globalstock.jpg?itok=TVpuE6BB" alt="5 Terre" style="width:100%">
+        <div class="container">
+            <p>Manage clients</p>
+        </div>
+    </div>
+</a>
+<a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">
+    <div class="polaroid">
+        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.timesheets.com%2Fblog%2Fwp-content%2Fuploads%2F2015%2F07%2FEmployees-in-a-meeting.jpg&f=1&nofb=1" alt="5 Terre" style="width:100%">
+        <div class="container">
+            @{
+                if (int.Parse(TempData.Peek("userID").ToString()) == int.Parse(Hotel_Reservations_Manager.Properties.Resources.AdminId))
+                {
+                        <p>Manage employees</p>
+                }
+                else
+                {
+                       <p>View employees</p>
+                }
+            }
+        </div>
+    </div>
+</a>
+<a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">
+    <div class="polaroid">
+        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/7da57169737633.5b8c2485b2eb5.jpg" alt="5 Terre" style="width:100%">
+        <div class="container">
+            @{
+                if (int.Parse(TempData.Peek("userID").ToString()) == int.Parse(Hotel_Reservations_Manager.Properties.Resources.AdminId))
+                {
+                    <p>Manage rooms</p>
+                }
+                else
+                {
+                    <p>View rooms</p>
+                }
+            }
+        </div>
+    </div>
+</a>
+<a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">
+    <div class="polaroid">
+        <img src="https://bookingjini.com/wp-content/uploads/2016/06/Property-Direct-Reservation-System.jpg" alt="5 Terre" style="width:100%">
+        <div class="container">
+            <p>Manage reservations</p>
+        </div>
+    </div>
+</a>
