@@ -61,6 +61,15 @@ namespace Hotel_Reservations_Manager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 4.
+        /// </summary>
+        public static string AdminId {
+            get {
+                return ResourceManager.GetString("AdminId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to False.
         /// </summary>
         public static string IsAdmin {

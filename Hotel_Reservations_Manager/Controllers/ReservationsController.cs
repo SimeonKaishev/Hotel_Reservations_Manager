@@ -68,15 +68,19 @@ namespace Hotel_Reservations_Manager.Controllers
                 {
                     return View(reservation);
                 }
-            HttpContext.Items.Add("startdate", reservation.StartDate);
+           // HttpContext.Items.Add("startdate", reservation.StartDate.ToString());
+            TempData["startdate"] = reservation.StartDate;
             //reservation.Reserver = CurrentUser.GetCurrent(_context);
-            HttpContext.Items.Add("enddate", reservation.EndDate);
-            HttpContext.Items.Add("IsAllInclusive", reservation.IsAllInclusive);
-            CurrentReservation.SetResFirst(reservation);
-            HttpContext.Items.Add("breakfast", reservation.IsBreakfastIncluded);
-                //_context.Add(reservation);
-               // await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ShowRooms));
+           // HttpContext.Items.Add("enddate", reservation.EndDate.ToString());
+            TempData["enddate"] = reservation.EndDate;
+           // HttpContext.Items.Add("IsAllInclusive", reservation.IsAllInclusive.ToString());
+            TempData["allink"] = reservation.IsAllInclusive;
+           // CurrentReservation.SetResFirst(reservation);
+           // HttpContext.Items.Add("breakfast", reservation.IsBreakfastIncluded.ToString());
+            TempData["breakfast"] = reservation.IsBreakfastIncluded;
+            //_context.Add(reservation);
+            // await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ShowRooms));
          //   }
            // return View(reservation);
         }
@@ -89,11 +93,15 @@ namespace Hotel_Reservations_Manager.Controllers
                 var rooms = (from r in _context.Rooms where r.Id == id select r).ToList();
                 if (rooms.Count > 0)
                 {
-                    HttpContext.Items.Add("roomId", rooms[0].Id);
-                    List<Client> clients = new List<Client>();
-                    HttpContext.Items.Add("clientIds",clients);
-                    CurrentReservation.Room = rooms[0];//
-                    CurrentReservation.Clients = new List<Client>();//
+                   // HttpContext.Items.Add("roomId", rooms[0].Id);
+                    TempData["roomid"] = rooms[0].Id;
+                    TempData["roomcap"] = rooms[0].Capacity;
+                    TempData["clientsnum"] = 0;
+                    //List<Client> clients = new List<Client>();
+                    // HttpContext.Items.Add("clientIds","");
+                    TempData["clientids"] =" ";
+                    //CurrentReservation.Room = rooms[0];//
+                    //CurrentReservation.Clients = new List<Client>();//
                     return RedirectToAction(nameof(ShowClients));
                 }
                 return RedirectToAction(nameof(ShowRooms));
@@ -113,26 +121,48 @@ namespace Hotel_Reservations_Manager.Controllers
                 return RedirectToAction(nameof(ShowClients));
             else
             {
-                if (CurrentReservation.Clients==null|| CurrentReservation.Clients.Count<CurrentReservation.Room.Capacity)
+                if ( int.Parse(TempData["clientsnum"].ToString())< int.Parse(TempData["roomcap"].ToString()))
                 {
                     var clients = (from c in _context.Clients where c.Id == id select c).ToList();
                     if (clients.Count > 0)
                     {
-                        
-                        CurrentReservation.Clients.Add(clients[0]);
+                        string clientIds;
+                        try
+                        {
+                             clientIds = TempData["clientids"].ToString();
+                        }
+                        catch (Exception)
+                        {
+                            clientIds = "";
+                        }
+                        clientIds += (clients[0].Id.ToString() + " ");
+                        TempData["clientsnum"] = int.Parse(TempData["clientsnum"].ToString()) + 1;
+                        //HttpContext.Items["clientIds"] = clientIds;
+                        TempData["clientids"] = clientIds;
+                       // CurrentReservation.Clients.Add(clients[0]);
                         return RedirectToAction(nameof(ShowClients));
                     }
                     
                     //return RedirectToAction(nameof(ShowClients));
                 }
-                Reservation res = CurrentReservation.GetReservation();
+                // Reservation res = CurrentReservation.GetReservation();
+                Reservation res = new Reservation();
+                res.StartDate = DateTime.Parse(TempData["startdate"].ToString());
+                 res.EndDate = DateTime.Parse(TempData["enddate"].ToString());
+                res.IsAllInclusive = bool.Parse(TempData["allink"].ToString());
+                res.IsAllInclusive = bool.Parse(TempData["breakfast"].ToString());
+               // string a = TempData["clientids"].ToString();
+                res.Reserver = CurrentReservation.GetReserver(int.Parse(TempData["userId"].ToString()), _context);
+                res.Room = CurrentReservation.GetRoom(int.Parse(TempData["roomid"].ToString()), _context);
+                res.Clients =CurrentReservation.GetClients(TempData["clientids"].ToString().Substring(1), _context);
+                res.Price = CurrentReservation.CalkPrice(res);
                 try { SecurityChecker.CheckReservation(res); }
                 catch (Exception)
                 {
                     return RedirectToAction(nameof(Create));
                 }
                 _context.Add(res);
-               // await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
         }

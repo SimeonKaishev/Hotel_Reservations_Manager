@@ -49,6 +49,8 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            if (int.Parse(TempData["userId"].ToString()) != int.Parse(Properties.Resources.AdminId))
+                return RedirectToAction(nameof(Index));
             return View();
         }
 
@@ -91,6 +93,8 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (int.Parse(TempData["userId"].ToString()) != int.Parse(Properties.Resources.AdminId))
+                return RedirectToAction(nameof(Index));
             if (id == null)
             {
                 return NotFound();
@@ -142,6 +146,8 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (int.Parse(TempData["userId"].ToString()) != int.Parse(Properties.Resources.AdminId))
+                return RedirectToAction(nameof(Index));
             if (id == null)
             {
                 return NotFound();
@@ -210,17 +216,11 @@ namespace Hotel_Reservations_Manager.Controllers
             HttpContext.Items.Add("username",user.Username);
             TempData["userId"] = users[0].Id;
             HttpContext.Items.Add("userId", users[0].Id);
+            string usrname = HttpContext.Items["username"].ToString();
             //HttpContext.Session.Set(Username, user.Username);
             //CurrentUser.SetCurrentUser(users[0].Id,users[0].Username);
-            //string username = CurrentUser.UserName;
-            if (users[0].Id == 1)
-            {
-                return RedirectToAction("IndexA", "Home");
-            }
-            else
-            {
                 return RedirectToAction("Index", "Home");
-            }
+
         }
     }
 }

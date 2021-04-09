@@ -1,4 +1,5 @@
-﻿using HotelData.Entity;
+﻿using HotelData;
+using HotelData.Entity;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -20,41 +21,45 @@ namespace Hotel_Reservations_Manager.Services
         public static  bool IsAllInclusive { get; set; }
         public static decimal Price { get; set; }
         private static int adults;
-        public static void SetResFirst(Reservation reservation)
+
+
+        public static decimal CalkPrice(Reservation res)
         {
-            Reserver = reservation.Reserver;
-            
-            StartDate = reservation.StartDate;
-            EndDate = reservation.EndDate;
-            IsAllInclusive = reservation.IsAllInclusive;
-            IsBreakfastIncluded = reservation.IsBreakfastIncluded;
-        }
-        public static Reservation GetReservation()
-        {
-            Reservation res = new Reservation();
-            res.Clients = Clients;
-            res.EndDate = EndDate;
-            res.IsAllInclusive = IsAllInclusive;
-            res.IsBreakfastIncluded = IsBreakfastIncluded;
-            CalkPrice();
-            res.Price = Price;
-            res.Reserver = Reserver;
-            res.Room = Room;
-            res.StartDate = StartDate;
-            return res;
-        }
-        private static void CalkPrice()
-        {
-            adults = 0;
-            Price = 0;
-            double days = (EndDate - StartDate).TotalDays;
-            foreach (var item in Clients)
+            int adults = 0;
+            decimal price = 0;
+            double days = (res.EndDate - res.StartDate).TotalDays;
+            foreach (var item in res.Clients)
             {
                 if (item.IsMinor == false)
                     adults++;
             }
-            Price += adults * Room.PriceAdult;
-            Price += (Clients.Count - adults) * Room.PriceKid;
+            price += adults * res.Room.PriceAdult;
+            price += (res.Clients.Count - adults) * res.Room.PriceKid;
+            return price;
+        }
+        public static Room GetRoom(int rId, HotelContext _context)
+        {
+            var rooms = (from r in _context.Rooms where r.Id == rId select r).ToList();
+            return rooms[0];
+        }
+        public static List<Client> GetClients(string cIds, HotelContext _context)
+        {
+            var Ids = cIds.Split(' ').ToList();
+            List<Client> ListOfClients=new List<Client>();
+            foreach (var id in Ids)
+            {
+                if (id != "" && id != " ")
+                {
+                    var clients = (from c in _context.Clients where c.Id == int.Parse(id) select c).ToList();
+                    ListOfClients.Add(clients[0]);
+                }
+            }
+            return ListOfClients;
+        }
+        public static User GetReserver(int rId, HotelContext _context)
+        {
+            var users = (from r in _context.Users where r.Id == rId select r).ToList();
+            return users[0];
         }
     }
 }

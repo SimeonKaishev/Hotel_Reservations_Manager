@@ -8,7 +8,7 @@
 
 <p>
     @{
-        if (int.Parse(TempData.Peek("userID").ToString()) == 1)
+        if (int.Parse(TempData.Peek("userID").ToString()) == int.Parse(Hotel_Reservations_Manager.Properties.Resources.AdminId))
         {
             <a asp-action="Create">Create New</a>
         }
@@ -61,7 +61,7 @@
             </td>
             <td>
                 @{
-                    if (int.Parse(TempData.Peek("userID").ToString()) == 1)
+                    if (int.Parse(TempData.Peek("userID").ToString()) == int.Parse(Hotel_Reservations_Manager.Properties.Resources.AdminId))
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><p></p>
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a><p></p>
