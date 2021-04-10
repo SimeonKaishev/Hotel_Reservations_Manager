@@ -20,6 +20,15 @@ namespace Hotel_Reservations_Manager.Controllers
 
         public IActionResult Index()
         {
+            try
+            {
+                if (TempData["userId"].ToString() == null)
+                    return RedirectToAction("LogIn", "Users");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("LogIn", "Users");
+            }
             return View();
         }
         public IActionResult IndexA()

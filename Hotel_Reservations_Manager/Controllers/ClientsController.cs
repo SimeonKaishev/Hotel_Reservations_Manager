@@ -23,12 +23,30 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Clients
         public async Task<IActionResult> Index()
         {
+            try
+            {
+                if (TempData["userId"].ToString() == null)
+                    return RedirectToAction("LogIn", "Users");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("LogIn", "Users");
+            }
             return View(await _context.Clients.ToListAsync());
         }
 
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            try
+            {
+                if (TempData["userId"].ToString() == null)
+                    return RedirectToAction("LogIn", "Users");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("LogIn", "Users");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -47,6 +65,15 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Clients/Create
         public IActionResult Create()
         {
+            try
+            {
+                if (TempData["userId"].ToString() == null)
+                    return RedirectToAction("LogIn", "Users");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("LogIn", "Users");
+            }
             return View();
         }
 
@@ -85,6 +112,15 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            try
+            {
+                if (TempData["userId"].ToString() == null)
+                    return RedirectToAction("LogIn", "Users");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("LogIn", "Users");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -136,6 +172,15 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            try
+            {
+                if (TempData["userId"].ToString() == null)
+                    return RedirectToAction("LogIn", "Users");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("LogIn", "Users");
+            }
             if (id == null)
             {
                 return NotFound();

@@ -25,12 +25,16 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            if (TempData["userId"].ToString()==null)
+                return RedirectToAction(nameof(LogIn));
             return View(await _context.Users.ToListAsync());
         }
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (TempData["userId"].ToString() == null)
+                return RedirectToAction(nameof(LogIn));
             if (id == null)
             {
                 return NotFound();
@@ -49,6 +53,8 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            if (TempData["userId"].ToString() == null)
+                return RedirectToAction(nameof(LogIn));
             if (int.Parse(TempData["userId"].ToString()) != int.Parse(Properties.Resources.AdminId))
                 return RedirectToAction(nameof(Index));
             return View();
@@ -93,6 +99,8 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (TempData["userId"].ToString() == null)
+                return RedirectToAction(nameof(LogIn));
             if (int.Parse(TempData["userId"].ToString()) != int.Parse(Properties.Resources.AdminId))
                 return RedirectToAction(nameof(Index));
             if (id == null)
@@ -146,6 +154,8 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (TempData["userId"].ToString() == null)
+                return RedirectToAction(nameof(LogIn));
             if (int.Parse(TempData["userId"].ToString()) != int.Parse(Properties.Resources.AdminId))
                 return RedirectToAction(nameof(Index));
             if (id == null)
