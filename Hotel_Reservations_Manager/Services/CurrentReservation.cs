@@ -35,7 +35,8 @@ namespace Hotel_Reservations_Manager.Services
             }
             price += adults * res.Room.PriceAdult;
             price += (res.Clients.Count - adults) * res.Room.PriceKid;
-            return price;
+
+            return price*(int)days;
         }
         public static Room GetRoom(int rId, HotelContext _context)
         {

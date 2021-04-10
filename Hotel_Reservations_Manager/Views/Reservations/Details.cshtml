@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Reservation details</h1>
 
 <div>
     <h4>Reservation</h4>
@@ -42,7 +42,9 @@
         </dd>
     </dl>
 </div>
+
 <div>
+    <a asp-action="ReservationClients" asp-route-id="@Model.Id">Show guests</a> |
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

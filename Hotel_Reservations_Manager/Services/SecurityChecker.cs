@@ -36,7 +36,12 @@ namespace Hotel_Reservations_Manager.Services
         }
         private static bool CheckEgn(string egn)
         {
-            return false;//tbd
+            int b = (egn[0] - '0') * 2 + (egn[1] - '0') * 4 + (egn[2] - '0') * 8 + (egn[3] - '0') * 5 + (egn[4] - '0') * 10 + (egn[5] - '0') * 9 + (egn[6] - '0') * 7 + (egn[7] - '0') * 3 + (egn[8] - '0') * 6;
+            int q = b / 11;
+            q = b - q * 11;
+            if (q == egn[9] - '0')
+                return true;
+            return false;
         }
         public static void CheckUser(User usr)
         {
@@ -57,6 +62,10 @@ namespace Hotel_Reservations_Manager.Services
             if (!CheckPass(usr.Password))
             {
                 throw new InvalidPassException();
+            }
+            if (!CheckEgn(usr.Egn))
+            {
+                throw new InvalidEgnException();
             }
         }
         public static void CheckClient(Client cl)

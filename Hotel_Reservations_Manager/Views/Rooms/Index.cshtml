@@ -3,8 +3,20 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
 
-<h1>Index</h1>
+    #myInput {
+        background-image: url('/css/searchicon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 20px 12px 40px;
+        border: 1px solid #ddd;
+        margin-bottom: 12px;
+    }
+</style>
+<h1>Rooms</h1>
 
 <p>
     @{
@@ -14,7 +26,15 @@
         }
     }
 </p>
-<table class="table">
+Filter by:
+<select id="types">
+    <option value="0">Capacity</option>
+    <option value="1">Type</option>
+    <option value="5">Room number</option>
+</select>
+<p></p>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for..." title="Type in a search value">
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th>
@@ -39,37 +59,59 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Capacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.roomTypes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PriceAdult)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PriceKid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.roomNumber)
-            </td>
-            <td>
-                @{
-                    if (int.Parse(TempData.Peek("userID").ToString()) == int.Parse(Hotel_Reservations_Manager.Properties.Resources.AdminId))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><p></p>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a><p></p>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.roomTypes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAvailable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceAdult)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceKid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.roomNumber)
+                </td>
+                <td>
+                    @{
+                        if (int.Parse(TempData.Peek("userID").ToString()) == int.Parse(Hotel_Reservations_Manager.Properties.Resources.AdminId))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><p></p>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a><p></p>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
                     }
-                }
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        var UserOption = document.getElementById('types').value;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[UserOption];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

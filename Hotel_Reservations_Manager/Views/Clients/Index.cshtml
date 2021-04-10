@@ -4,12 +4,33 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Clients</h1>
+<style>
 
+    #myInput {
+        background-image: url('/css/searchicon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 2px 12px 4px;
+        border: 1px solid #ddd;
+        margin-bottom: 12px;
+    }
+</style>
 <p>
-            <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+Filter by:
+<select id="types">
+    <option value="0">Name</option>
+    <option value="1">Family name</option>
+
+</select>
+<p></p>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for..." title="Type in a search value">
+
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th>
@@ -50,9 +71,9 @@
                     @Html.DisplayFor(modelItem => item.IsMinor)
                 </td>
                 <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><p></p>
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a><p></p>
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><p></p>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a><p></p>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
             <div>
@@ -61,3 +82,24 @@
         }
     </tbody>
 </table>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        var UserOption = document.getElementById('types').value;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[UserOption];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

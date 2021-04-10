@@ -23,30 +23,14 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
+
             return View(await _context.Reservations.ToListAsync());
         }
 
         // GET: Reservations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
+
             if (id == null)
             {
                 return NotFound();
@@ -65,15 +49,7 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Reservations/Create
         public IActionResult Create()
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
+
             return View();
         }
 
@@ -113,15 +89,7 @@ namespace Hotel_Reservations_Manager.Controllers
         }
         public async Task<IActionResult> ConfirmRoom(int id)
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
+
             if (id == 0)
                 return RedirectToAction(nameof(ShowRooms));
             else
@@ -145,41 +113,17 @@ namespace Hotel_Reservations_Manager.Controllers
         }
         public async Task<IActionResult> ShowRooms()
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
-            return View(await _context.Rooms.ToListAsync());
+
+            return View(await _context.Rooms.Where(r=> r.IsAvailable==true).ToListAsync());
         }
         public async Task<IActionResult> ShowClients()
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
+
             return View(await _context.Clients.ToListAsync());
         }
         public async Task<IActionResult> ConfirmClient(int id)
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
+
             if (id == 0)
                 return RedirectToAction(nameof(ShowClients));
             else
@@ -232,15 +176,7 @@ namespace Hotel_Reservations_Manager.Controllers
         // GET: Reservations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            try
-            {
-                if (TempData["userId"].ToString() == null)
-                    return RedirectToAction("LogIn", "Users");
-            }
-            catch (Exception)
-            {
-                return RedirectToAction("LogIn", "Users");
-            }
+
             if (id == null)
             {
                 return NotFound();
@@ -330,6 +266,24 @@ namespace Hotel_Reservations_Manager.Controllers
         private bool ReservationExists(int id)
         {
             return _context.Reservations.Any(e => e.Id == id);
+        }
+        public async Task<IActionResult> ReservationClients(int? id)
+        {
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+           // var reservation = _context.Reservations.Where(r => r.Id==id).ToListAsync();//await _context.Reservations.FirstOrDefaultAsync(m => m.Id == id);
+            var reservation = (from r in _context.Reservations where r.Id == id select r).ToList();
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+            var clients = reservation[0].Clients;
+            return View(clients);
+
         }
     }
 }
