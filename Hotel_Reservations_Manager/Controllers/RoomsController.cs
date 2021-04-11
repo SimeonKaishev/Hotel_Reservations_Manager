@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HotelData;
 using HotelData.Entity;
 using Hotel_Reservations_Manager.Services;
+using Hotel_Reservations_Manager.Exeptions;
 
 namespace Hotel_Reservations_Manager.Controllers
 {
@@ -76,6 +77,12 @@ namespace Hotel_Reservations_Manager.Controllers
                 try
                 {
                     AvailabilityChecker.CheckRoomAvailabikity(room, _context);
+                }
+                catch (RoomNumberExistsException)
+                {
+                    ViewData["message"] = "Room number already exists";
+                    room.roomNumber = 0;
+                    return View(room);
                 }
                 catch (Exception)
                 {

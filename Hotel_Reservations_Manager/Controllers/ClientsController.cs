@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HotelData;
 using HotelData.Entity;
 using Hotel_Reservations_Manager.Services;
+using Hotel_Reservations_Manager.Exeptions;
 
 namespace Hotel_Reservations_Manager.Controllers
 {
@@ -71,6 +72,18 @@ namespace Hotel_Reservations_Manager.Controllers
                 try
                 {
                     AvailabilityChecker.CheckClientAvailabikity(client, _context);
+                }
+                catch (EmailAlreadyExistsException)
+                {
+                    ViewData["message"] = "Email is already registered";
+                    client.Email = null;
+                    return View(client);
+                }
+                catch (PhoneAlreadyExistsException)
+                {
+                    ViewData["message"] = "Phone is already registered";
+                    client.PhoneNumber = null;
+                    return View(client);
                 }
                 catch (Exception)
                 {

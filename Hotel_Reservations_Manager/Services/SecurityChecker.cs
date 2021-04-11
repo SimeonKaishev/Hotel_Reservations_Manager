@@ -99,6 +99,10 @@ namespace Hotel_Reservations_Manager.Services
             {
                 throw new InvalidCapacityException();
             }
+            if (room.roomTypes!= "Double" && room.roomTypes != "TwoBed" && room.roomTypes != "Appartament" && room.roomTypes != "PentHouse")
+            {
+                throw new ArgumentNullException();
+            }
 
         }
         public static void CheckDate(DateTime start, DateTime end)

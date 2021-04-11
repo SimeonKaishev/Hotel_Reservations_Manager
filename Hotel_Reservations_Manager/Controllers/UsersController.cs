@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HotelData;
 using HotelData.Entity;
 using Hotel_Reservations_Manager.Services;
+using Hotel_Reservations_Manager.Exeptions;
 
 namespace Hotel_Reservations_Manager.Controllers
 {
@@ -72,17 +73,47 @@ namespace Hotel_Reservations_Manager.Controllers
                 {
                     SecurityChecker.CheckUser(user);
                 }
+                catch (InvalidEgnException)
+                {
+                    ViewData["message"] = "Egn is invalid";
+                    user.Egn = null;
+                    return View(user);
+                }
                 catch (Exception)
                 {
                     return View(user);
                 }
                 try
                 {
-                  AvailabilityChecker.CheckUserAvailabikity(user,_context);
+                    AvailabilityChecker.CheckUserAvailabikity(user, _context);
+                }
+                catch (UsernameAlreadyExistsException)
+                {
+                    ViewData["message"] = "Username is taken";
+                    user.Username = null;
+                    return View(user);
+                }
+                catch (EmailAlreadyExistsException)
+                {
+                    ViewData["message"] = "Email is already registered";
+                    user.Email = null;
+                    return View(user);
+                }
+                catch (EgnAlreadyExistsException)
+                {
+                    ViewData["message"] = "EGN is already registered";
+                    user.Egn = null;
+                    return View(user);
+                }
+                catch (PhoneAlreadyExistsException)
+                {
+                    ViewData["message"] = "Phone is already registered";
+                    user.PhoneNumber = null;
+                    return View(user);
                 }
                 catch (Exception)
                 {
-                   return View(user);
+                    return View(user);
                 }
                 user.Password = Hasher.GetHash(user.Password);
                 _context.Add(user);
@@ -242,7 +273,13 @@ namespace Hotel_Reservations_Manager.Controllers
             _context.Update(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }   
+        }
+        public async Task<IActionResult> Logout()
+        {
+            TempData["userId"] = null;
+            TempData["Username"] = null;
+            return RedirectToAction(nameof(LogIn));
+        }
     }
 }
 
